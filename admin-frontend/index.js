@@ -44,7 +44,6 @@ Vue.component('tab-selector', {
   },
   methods: {
     selectTab() {
-      console.log("Select tab=", this.id);
       this.$emit('input', this.id);
     },
   },
@@ -85,6 +84,14 @@ Vue.component('log-table', {
     </div>
 
     <table class="log-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Workbook</th>
+          <th>Site</th>
+          <th>Fonts</th>
+        </tr>
+      </thead>
       <tbody>
         <log-row v-for="row in rows" :key="row.id" :value="row" :fonts="fonts">
         </log-row>
@@ -129,11 +136,9 @@ Vue.component('font-status', {
   props: [ 'name', 'fonts' ],
   computed: {
     isInstalled() {
-      console.log("fonts=", this.fonts);
       // Vue observables do not support for..of loops.... :(
       for (let i=0; i < this.fonts.length; ++i) {
         const font = this.fonts[i];
-        console.log("font=", font);
 
         if (font.font_name === this.name) {
           return font.is_installed;

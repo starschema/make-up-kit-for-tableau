@@ -21,6 +21,12 @@ Vue.component('fonts-table', {
 
       <table>
         <thead>
+          <tr>
+            <th>Installed?</th>
+            <th>Font name</th>
+            <th>CSS</th>
+            <th>Workbooks using it</th>
+          </tr>
         </thead>
         <tbody>
           <fonts-table-row v-for="font in fonts" :key="font.font_name" :value="font">
@@ -35,11 +41,17 @@ Vue.component('fonts-table', {
 Vue.component('fonts-table-row', {
   props: ['value'],
   template: `
-    <tr>
-      <td>{{ value.is_installed }}</td>
-      <td>{{ value.font_name }}</td>
-      <td>{{ value.css_for_font }}</td>
-      <td>
+    <tr class="fonts-table-row" :class="{ installed: value.is_installed, 'not-installed': !value.is_installed }">
+      <td class="is_installed">
+        {{ value.is_installed ? 'Installed' : 'Not installed' }}
+      </td>
+      <td class="font_name">{{ value.font_name }}</td>
+      <td class="css_for_font">
+        <code>
+          {{ value.css_for_font.substr(0, 30) }}
+        </code>
+      </td>
+      <td class="workbooks_list">
           <workbooks-list :workbooks=value.workbooks></workbooks-list>
       </td>
     </tr>

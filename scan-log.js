@@ -113,7 +113,7 @@ async function getWorkbooksUsedByFonts() {
   return res.rows.reduce((memo, row) => {
     let fontName = row.font_name;
     if (typeof memo[fontName] === 'undefined') {
-      memo[fontName] = new Set();
+      memo[fontName] = {};
     }
 
     // if no workbooks match then the workbook name is NULL, we dont want it, but we still want it
@@ -122,10 +122,10 @@ async function getWorkbooksUsedByFonts() {
       return memo;
     }
 
-    memo[fontName].add({
+    memo[fontName][row.workbook_luid] = {
       name: row.workbook_name,
       id: row.workbook_luid,
-    });
+    };
     return memo;
   }, {});
 
@@ -136,7 +136,7 @@ async function getAllFontsWithUsedWorkbooks() {
   let workbooksByFont = await getWorkbooksUsedByFonts();
 
   return allFonts.map(f => {
-    let workbooks = Array.from(workbooksByFont[f.font_name]);
+    let workbooks = Object.values(workbooksByFont[f.font_name]);
     return Object.assign(f, { workbooks: workbooks });
   });
 }

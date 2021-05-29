@@ -61,7 +61,7 @@ Vue.component('color-theme-table', {
 
   computed: {
     hasSelection() {
-      return typeof this.selected === 'number';
+      return typeof this.selected === 'number' && (this.selected <= this.themes.length);
     },
     selectedTheme() {
       if (!this.hasSelection || this.selected >= this.themes.length) {
@@ -82,8 +82,8 @@ Vue.component('color-theme-table', {
       <table>
         <thead>
           <tr>
-            <th>Workbook Name Regexp</th>
             <th>Rule Weight</th>
+            <th>Workbook Name Regexp</th>
             <th>Color</th>
             <th>Background</th>
             <th>Width</th>
@@ -92,7 +92,7 @@ Vue.component('color-theme-table', {
           </tr>
         </thead>
         <tbody>
-          <color-table-row v-for="(row, idx) in themes" :key="row.id" :value="row" :idx="idx"
+          <color-table-row v-for="(row, idx) in themes" :key="row.id" :value="row" :idx="idx" :selected="selected"
               @click="setSelection"
               @delete="deleteTheme">
           </color-table-row>
@@ -102,7 +102,14 @@ Vue.component('color-theme-table', {
 
 
     <div class="themes-editor-wrapper">
-      <color-editor v-if="hasSelection" :value="selectedTheme" @change="selectedThemeChanged"></color-editor>
+
+      <!-- if shown -->
+      <color-editor v-if="selectedTheme" :value="selectedTheme" @change="selectedThemeChanged"></color-editor>
+
+      <!-- helper otherwise -->
+      <div class="color-editor no-content" v-if="!selectedTheme" >
+        Select a Theme to edit...
+      </div>
     </div>
   </div>
   `,
@@ -110,29 +117,31 @@ Vue.component('color-theme-table', {
 
 
 Vue.component('color-table-row', {
-  props: [ 'idx', 'value' ],
+  props: [ 'selected', 'idx', 'value' ],
   computed: {
     canBeDeleted() {
       return typeof this.value.id === 'number';
     },
+    isSelected() {
+      return this.selected === this.idx;
+    },
   },
   methods: {
     selectThisRow() {
-      console.log("Clicked", this.idx);
       this.$emit("click", {idx: this.idx, value: this.value});
     },
   },
   template: `
-    <tr>
-      <td>{{ value.testRegexp }}</td>
-      <td>{{ value.weight }}</td>
-      <td @click='selectThisRow()'><color-block :value="value.color"></color-block></td>
+    <tr class="color-table-row" :class="{ 'selected': isSelected }" @click='selectThisRow()'>
+      <td class="weight">{{ value.weight }}</td>
+      <td class="regexp">{{ value.testRegexp }}</td>
+      <td><color-block :value="value.color"></color-block></td>
       <td><color-block :value="value.backgroundColor"></color-block></td>
-      <td>{{ value.width }}</td>
-      <td>{{ value.radius }}</td>
-      <td>{{ value.inset }}</td>
+      <td class="width">{{ value.width }}px</td>
+      <td class="radius">{{ value.radius }}px</td>
+      <td class="inset">{{ value.inset }}px</td>
       <td>
-        <button v-if="canBeDeleted" @click="$emit('delete', value.id)">Delete</button>
+        <button :disabled="canBeDeleted ? false : true" @click="$emit('delete', value.id)">Delete</button>
       </td>
     </tr>
   `

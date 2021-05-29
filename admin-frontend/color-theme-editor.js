@@ -6,6 +6,7 @@ Vue.component('color-editor', {
   props: [ 'value' ],
   data: function() {
     return {
+      randomText: randomParagraphs(),
     };
   },
   computed: {
@@ -73,67 +74,86 @@ Vue.component('color-editor', {
   },
   template: `
     <div class='color-editor'>
-      <text-input v-model="value.testRegexp" label="Test Regexp"></text-input>
-      <help>
-        A regular expression that will be checked against the name of the current workbook.
-        If the title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
-
-        To apply to all workbooks set it to <code>.*</code>.
-      </help>
-
-      <number-input v-model="value.weight" label="Weight"></number-input>
-      <help>
-        Used for finding out which style to apply if more then one style matches the name of the current workbook.
-        If the current workbook's title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
-
-      </help>
-
-
-
-
-
-      <color-selector v-model='value.color' label='Scrollbar colour'></color-selector>
-      <help>
-        The colour of the scrollbar.
-      </help>
-
-      <color-selector v-model='value.backgroundColor' label='Background'></color-selector>
-      <help>
-        The colour of the scroll area.
-      </help>
-
-      <size-selector v-model="value.width" label="Width" :values="widthValues"></size-selector>
-      <help>
-        The width of the scrollbar
-      </help>
-
-      <size-selector v-model="value.radius" label="Radius" :values="radiusValues"></size-selector>
-      <help>
-        The radius of the rounding of the scroll bar. When set to zero the scrollbar is all square angles.
-      </help>
-
-      <size-selector v-model="value.inset" label="Inset" :values="offsetValues"></size-selector>
-      <help>
-        The amount of space between the scrollbar and the scroll area.
-      </help>
-
-      <component is="style">
-        {{css}}
-      </component>
-
-      <pre :style="{overflow: 'scroll', height: '200px'}">
-        {{ css }}
-
-        {{ themeData }}
-      </pre>
-
-      <div v-if="isUnsaved">
-        <button @click="saveNew">Create new Theme</button>
+      <div class="toolbar">
+        <button v-if="!isUnsaved" @click="saveExisting">Save Theme</button>
+        <button v-if="isUnsaved" @click="saveNew">Save new Theme</button>
       </div>
 
-      <div v-if="!isUnsaved">
-        <button @click="saveExisting">Save Theme</button>
-      </div>
+      <div class="color-editor-form">
+
+        <text-input v-model="value.testRegexp" label="Test Regexp"></text-input>
+        <help>
+          A regular expression that will be checked against the name of the current workbook.
+          If the title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
+
+          To apply to all workbooks set it to <code>.*</code>.
+        </help>
+
+        <number-input v-model="value.weight" label="Weight"></number-input>
+        <help>
+          Used for finding out which style to apply if more then one style matches the name of the current workbook.
+          If the current workbook's title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
+
+        </help>
+
+
+
+
+
+        <color-selector v-model='value.color' label='Scrollbar'></color-selector>
+        <help>
+          The colour of the scrollbar.
+        </help>
+
+        <color-selector v-model='value.backgroundColor' label='Background'></color-selector>
+        <help>
+          The colour of the scroll area.
+        </help>
+
+        <size-selector v-model="value.width" label="Width" :values="widthValues"></size-selector>
+        <help>
+          The width of the scrollbar
+        </help>
+
+        <size-selector v-model="value.radius" label="Radius" :values="radiusValues"></size-selector>
+        <help>
+          The radius of the rounding of the scroll bar. When set to zero the scrollbar is all square angles.
+        </help>
+
+        <size-selector v-model="value.inset" label="Inset" :values="offsetValues"></size-selector>
+        <help>
+          The amount of space between the scrollbar and the scroll area.
+        </help>
+
+      </div> <!-- form -->
+
+
+
+      <div class="preview">
+        <h4>Preview</h4>
+
+        <component is="style">
+          {{css}}
+        </component>
+
+        <div :style="{overflow: 'scroll', height: '200px'}">
+          <p v-for="line in randomText">
+            {{ line }}
+          </p>
+
+          <h4>CSS used</h4>
+          <pre>
+            {{ css }}
+          </pre>
+
+          <h4>Theme data</h4>
+          <pre>
+          {{ themeData }}
+          </pre>
+        </div>
+
+      </div> <!-- preview -->
+
     </div>
   `,
 });
@@ -161,8 +181,8 @@ Vue.component('color-selector', {
   },
   template: `
   <div class='input-row color-selector'>
-    <input type='color' :id='id' :value='value' @input='valueChanged' />
     <label :for='id' >{{ label }}</label>
+    <input type='color' :id='id' :value='value' @input='valueChanged' />
   </div>
   `,
 });
