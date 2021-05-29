@@ -1,0 +1,9 @@
+
+{
+  "server": {
+    "server": "https://tableau.server",
+    "apiVersion": "3.9",
+    "username": "USERNAME",
+    "password": "PASSWORD"
+  }
+}

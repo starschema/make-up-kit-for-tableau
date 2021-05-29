@@ -1,0 +1,16 @@
+{
+  "name": "tabfont-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Gyula Laszlo <gyula.laszlo.gm@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "jszip": "^3.6.0",
+    "lodash": "^4.17.21",
+    "pg": "^8.6.0",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.32"
+  }
+}

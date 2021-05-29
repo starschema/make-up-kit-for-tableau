@@ -1,0 +1,116 @@
+:root {
+  --main-color: #eee;
+  --alt-color: #0f0f0f;
+
+  --accent-alt-color-1: #181818;
+  --accent-alt-color-2: #383838;
+
+  --font-family: "Helvetica Neue", "Arial", "sans-serif";
+  --font-base-size: 14px;
+  --font-line-spacing: 1.4;
+
+  --ok-color: #0f7;
+  --err-color: #f30;
+
+
+  --font-size-s: calc(var(--font-base-size) * 0.8);
+  --font-size-m: var(--font-base-size);
+  --font-size-l: calc(var(--font-base-size) * 1.4);
+
+  --help-padding: 1em;
+  --help-color: #ccc;
+
+  --header-size: 3em;
+  --tab-padding: calc((var(--header-size) - 1.2em) / 2) 1em;
+}
+
+body {
+  font:
+      var(--font-base-size)/calc(var(--font-base-size) * var(--font-line-spacing))
+      var(--font-family);
+  color: var(--main-color);
+  background-color: var(--alt-color);
+}
+
+
+
+/* TABLES */
+
+body table {
+  width: 100%;
+}
+
+body table tr:nth-child(2n) td {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* TABS */
+
+.tab-bar {
+  height: var(--header-size);
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex;
+  background: var(--accent-alt-color-1);
+  border-bottom: 0.2em solid var(--accent-alt-color-2);
+}
+
+.tab-bar .tab-selector {
+  font-weight: bold;
+  padding: var(--tab-padding);
+  cursor: pointer;
+}
+
+.tab-bar .tab-selector:hover {
+  background: var(--accent-alt-color-2);
+  border-bottom: 0.2em solid var(--alt-color);
+}
+
+.tab-bar .tab-selector.is-selected {
+  background: var(--accent-alt-color-2);
+  border-bottom: 0.2em solid transparent;
+}
+
+.tab-container { padding-top: calc(var(--header-size) + 1.5em);  }
+
+/* LOG TABLE */
+
+
+.log-table {}
+
+.log-table .font-list {}
+
+.log-table .font-status {}
+.log-table .font-status.installed { color: var(--ok-color); }
+.log-table .font-status.not-installed { color: var(--err-color); }
+
+
+/* THEMES EDITOR */
+
+.theme-editor {
+  display: grid;
+  grid-template-columns: 1fr 30em;
+  grid-template-areas:
+    "header header"
+    "table  editor" ;
+
+}
+
+.themes-editor .toolbar { grid-area: header; }
+.themes-table-wrapper { grid-area: table; }
+.themes-editor-wrapper { grid-area: editor; }
+
+
+label { font-weight: bold; }
+
+.size-selector label { width: 6em; display: inline-block; }
+
+.color-selector input { width: 4em; height: 2em; vertical-align: middle; }
+.size-selector select { width: 6em; height: 2em; vertical-align: middle; }
+
+
+
+/* GENERIC STUFF */
+
+.help { font-size: var(--font-size-s); padding: var(--help-padding); line-height: 1.2; color: var(--help-color); margin-bottom: 1em; }
+
+

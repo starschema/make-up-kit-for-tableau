@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tableau Make-Up Kit admin</title>
+    <link href="reset.css" rel="stylesheet">
+    <link href="app.css" rel="stylesheet">
+  </head>
+<body>
+  <div id="app">
+
+    <div class="tab-bar">
+      <tab-selector id="scanLog" v-model="selectedTab">Scan Log</tab-selector>
+      <tab-selector id="fonts" v-model="selectedTab">Fonts</tab-selector>
+      <tab-selector id="themes" v-model="selectedTab">Themes</tab-selector>
+    </div>
+
+    <tab-container id="scanLog" :selected="selectedTab">
+      <log-table :rows="log" :fonts="fonts" @refresh="reloadFonts"></log-table>
+    </tab-container>
+
+    <tab-container id="fonts" :selected="selectedTab">
+      <fonts-table :fonts="fonts" @refresh="reloadFonts"></fonts-table>
+    </tab-container>
+
+    <tab-container id="themes" :selected="selectedTab">
+      <color-theme-table></color-theme-table>
+    </tab-container>
+
+  </div>
+
+    <script src="lib/axios.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="scrollbar-colors.js"></script>
+    <script src="color-theme-editor.js"></script>
+    <script src="fonts.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
