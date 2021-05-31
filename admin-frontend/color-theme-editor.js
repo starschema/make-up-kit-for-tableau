@@ -3,7 +3,11 @@
 
 
 Vue.component('color-editor', {
-  props: [ 'value' ],
+  props: {
+    value: Object,
+    nosave: { type: Boolean, default: false },
+    norulemeta: { type: Boolean, default: false },
+  },
   data: function() {
     return {
       randomText: randomParagraphs(),
@@ -33,6 +37,10 @@ Vue.component('color-editor', {
       let { id, testRegexp, weight, color, backgroundColor, radius, width, inset, } = this.value;
 
       return { id, testRegexp, weight, color, backgroundColor, radius, width, inset, };
+    },
+
+    displaySaveButtons() {
+      return !this.nosave;
     },
   },
   methods: {
@@ -74,28 +82,31 @@ Vue.component('color-editor', {
   },
   template: `
     <div class='color-editor'>
-      <div class="toolbar">
+      <div class="toolbar" v-if="displaySaveButtons">
         <button v-if="!isUnsaved" @click="saveExisting">Save Theme</button>
         <button v-if="isUnsaved" @click="saveNew">Save new Theme</button>
       </div>
 
       <div class="color-editor-form">
 
-        <text-input v-model="value.testRegexp" label="Test Regexp"></text-input>
-        <help>
-          A regular expression that will be checked against the name of the current workbook.
-          If the title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
+        <div v-if="!norulemeta">
 
-          To apply to all workbooks set it to <code>.*</code>.
-        </help>
+          <text-input v-model="value.testRegexp" label="Test Regexp"></text-input>
+          <help>
+            A regular expression that will be checked against the name of the current workbook.
+            If the title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
 
-        <number-input v-model="value.weight" label="Weight"></number-input>
-        <help>
-          Used for finding out which style to apply if more then one style matches the name of the current workbook.
-          If the current workbook's title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
+            To apply to all workbooks set it to <code>.*</code>.
+          </help>
 
-        </help>
+          <number-input v-model="value.weight" label="Weight"></number-input>
+          <help>
+            Used for finding out which style to apply if more then one style matches the name of the current workbook.
+            If the current workbook's title matches, then the heaviest matched scroll bar theme wins (see "Rule weight").
 
+          </help>
+
+        </div>
 
 
 

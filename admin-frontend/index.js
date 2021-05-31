@@ -1,5 +1,7 @@
 let app;
 
+// MAIN ENTRY POINT
+// ----------------
 (async () => {
 
   let allItems = await fetchScanLog();
@@ -8,7 +10,6 @@ let app;
   app = new Vue({
     el: '#app',
     data: {
-      message: 'Hello Vue!',
       log: allItems,
       fonts: allFonts,
 
